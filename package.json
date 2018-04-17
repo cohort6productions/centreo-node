@@ -1,0 +1,15 @@
+{
+  "name": "centreo",
+  "version": "1.0.0",
+  "description": "Automate the client input form process",
+  "main": "index.js",
+  "repository": "https://justintingfung@bitbucket.org/justintingfung/centreo.git",
+  "author": "Justin Ho <justintingfung@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {}
+}
