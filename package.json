@@ -6,10 +6,17 @@
   "repository": "https://justintingfung@bitbucket.org/justintingfung/centreo.git",
   "author": "Justin Ho <justintingfung@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "eslint": "./node_modules/.bin/eslint *.js */*.js"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0"
+  }
 }
