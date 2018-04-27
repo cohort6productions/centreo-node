@@ -10,9 +10,12 @@
     "eslint": "./node_modules/.bin/eslint *.js */*.js"
   },
   "dependencies": {
+    "ajv": "^6.4.0",
     "axios": "^0.18.0",
+    "bunyan": "^1.8.12",
     "dotenv": "^5.0.1",
     "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0"
   },
   "devDependencies": {
