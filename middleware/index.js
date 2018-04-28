@@ -8,8 +8,7 @@ class Middleware {
       await next();
     } else {
       ctx.status = 400;
-      ctx.body = {code: 400, data: 'Bad request'};
-      return
+      ctx.body = { code: 400, data: 'Bad request' };
     }
   }
 }
