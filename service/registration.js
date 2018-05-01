@@ -1,12 +1,11 @@
 const axios = require('axios');
 
-const log = require('../lib/logger');
-const config = require('../config');
+const { crm } = require('../config');
 
 const {
   BASE_URL,
   headerConfig,
-} = config;
+} = crm;
 
 class RegistrationService {
   static createRegistration(party) {
