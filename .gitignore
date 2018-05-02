@@ -1,5 +1,5 @@
 node_modules
-config/*
+config/index.js
 .env
 privatekey.pem
 public_privatekey.pfx

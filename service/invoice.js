@@ -21,19 +21,11 @@ class InvoiceService {
 
     return result;
   }
-  static createInvoice(input) {
-    const invoiceURL = BASE_URL + 'Invoices'
+  static async createInvoice(input) {
+    
+    const result = await xero.invoices.create(data);
     return axios.post()
   }
-  // static async getInvoice() {
-  //   // You can initialise Private apps directly from your configuration
-
-  //   const result = await xero.invoices.get();
-    
-  //   console.log('Number of invoices:', result.Invoices.length);
-
-  //   return result.Invoices[0]
-  // }
 }
 
 module.exports = InvoiceService;
