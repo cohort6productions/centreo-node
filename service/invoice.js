@@ -1,4 +1,5 @@
 const axios = require('axios');
+const XeroClient = require('xero-node').AccountingAPIClient;
 
 const { invoice } = require('../config');
 
@@ -7,19 +8,32 @@ const {
   headerConfig,
 } = invoice;
 
+let xero = new XeroClient(invoice.appCredentials);
+
 class InvoiceService {
-  static createContact(party) {
-    const contactURL = BASE_URL + 'Contacts';
+  static async createContact(party) {
     const data = {
-      "Name": party.name
+      "Name": "FOR TEST 1"
       // "EmailAddress": party.emailAddresses[0]
     };
-    return axios.post(contactURL, data, headerConfig);
+
+    const result = await xero.contacts.create(data);
+
+    return result;
   }
   static createInvoice(input) {
     const invoiceURL = BASE_URL + 'Invoices'
     return axios.post()
   }
+  // static async getInvoice() {
+  //   // You can initialise Private apps directly from your configuration
+
+  //   const result = await xero.invoices.get();
+    
+  //   console.log('Number of invoices:', result.Invoices.length);
+
+  //   return result.Invoices[0]
+  // }
 }
 
-module.exports = RegistrationService;
+module.exports = InvoiceService;
