@@ -18,6 +18,15 @@ const config = {
     },
   },
   development: 'windows',
+  logger: {
+    name: '',
+    level: 'trace',
+    streams: [
+      {
+        path: './logs/server.log',
+      },
+    ],
+  },
 };
 
 module.exports = config;
