@@ -1,14 +1,8 @@
-const axios = require('axios');
 const XeroClient = require('xero-node').AccountingAPIClient;
 
 const { invoice } = require('../config');
 
-const {
-  BASE_URL,
-  headerConfig,
-} = invoice;
-
-let xero = new XeroClient(invoice.appCredentials);
+const xero = new XeroClient(invoice.appCredentials);
 
 class InvoiceService {
   static async createContact(party) {
@@ -23,25 +17,25 @@ class InvoiceService {
   }
   static async createInvoice({ ContactID }) {
     const data = {
-      Type: "ACCREC",
-      Contact: { 
+      Type: 'ACCREC',
+      Contact: {
         ContactID,
       },
       LineItems: [
         {
-          Quantity: "1",
-          ItemCode: "HKCI",
-        }
+          Quantity: '1',
+          ItemCode: 'HKCI',
+        },
       ],
       Date: new Date(),
       DueDate: new Date(),
-      LineAmountTypes: "NoTax",
-      Status: "DRAFT",
-    }
+      LineAmountTypes: 'NoTax',
+      Status: 'DRAFT',
+    };
 
     const result = await xero.invoices.create(data);
 
-    return result
+    return result;
   }
 }
 

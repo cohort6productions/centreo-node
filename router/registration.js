@@ -12,18 +12,18 @@ const router = new Router();
 router.post(
   '/',
   middleware.schemaValidator,
-  async (ctx, next) => {
+  async ctx => {
     try {
-      const registrationResult = await RegistrationService.createRegistration(ctx.request.body);
-      log.trace(registrationResult, 'router:registration:crm:createRegistration');
-
       const contactResult = await InvoiceService.createContact(ctx.request.body.party);
       log.trace(contactResult, 'router:registration:invoice:createContact');
 
       const invoiceResult = await InvoiceService.createInvoice({
-        ContactID: contactResult.Contacts[0].ContactID
-      })
+        ContactID: contactResult.Contacts[0].ContactID,
+      });
       log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
+
+      const registrationResult = await RegistrationService.createRegistration(ctx.request.body);
+      log.trace(registrationResult, 'router:registration:crm:createRegistration');
 
       ctx.code = 200;
       ctx.body = {
@@ -32,7 +32,7 @@ router.post(
           registration: registrationResult.statusText,
           invoiceContact: contactResult.Status,
           invoice: invoiceResult.Status,
-        } 
+        },
       };
     } catch (err) {
       log.error(err);

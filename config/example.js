@@ -7,14 +7,17 @@ const config = {
       headers: {
         Authorization: `Bearer ${process.env.CAPSULE_AUTH_TOKEN}`,
       },
-    }
+    },
   },
   invoice: {
-    "appType" : "",
-    "consumerKey": "",
-    "consumerSecret": "",
-    "privateKeyPath": "/some/path/to/privatekey.pem"
-  }
-}
+    appCredentials: {
+      appType: '',
+      consumerKey: '',
+      consumerSecret: '',
+      privateKeyPath: '',
+    },
+  },
+  development: 'windows',
+};
 
 module.exports = config;

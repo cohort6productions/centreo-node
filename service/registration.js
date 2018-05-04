@@ -8,7 +8,12 @@ const {
 } = crm;
 
 class RegistrationService {
-  static createRegistration(party) {
+  static createRegistration(input) {
+    const party = {
+      party: {
+        ...input,
+      },
+    };
     return axios.post(BASE_URL, party, headerConfig);
   }
 }
