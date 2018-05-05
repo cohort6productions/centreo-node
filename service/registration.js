@@ -8,13 +8,52 @@ const {
 } = crm;
 
 class RegistrationService {
-  static createRegistration(input) {
-    const party = {
+  static createRegistration({
+    main,
+    invoiceNo,
+  }) {
+    const today = new Date();
+    const todayString = `${today.getFullYear()}-${today.getMonth() >= 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`}-${today.getDate() >= 10 ? today.getDate() : `0${today.getDate()}`}`;
+    
+    const data = {
       party: {
-        ...input,
+        ...main,
+        fields: [
+          {
+            definition: {
+              id: 291070 // IH/VO/CW/CR
+            },
+            value: invoiceNo
+          },
+          {
+            definition: {
+              id: 291071 // Company Incorporation Date
+            },
+            value: todayString
+          },
+          {
+            definition: {
+              id: 291072 // Company Secretary Date
+            },
+            value: todayString
+          },
+          {
+            definition: {
+              id: 291075 // WC Registered Office
+            },
+            value: todayString
+          },
+          {
+            definition: {
+              id: 291077 // SW RO
+            },
+            value: todayString
+          }
+        ]
       },
     };
-    return axios.post(BASE_URL, party, headerConfig);
+
+    return axios.post(BASE_URL, data, headerConfig);
   }
 }
 

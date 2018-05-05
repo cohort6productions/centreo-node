@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "eslint": "./node_modules/.bin/eslint *.js */*.js",
-    "log": "tail -f logs/server-0.log | ./node_modules/.bin/bunyan"
+    "log": "tail -f logs/server.log | ./node_modules/.bin/bunyan"
   },
   "dependencies": {
     "ajv": "^6.4.0",
