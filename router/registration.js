@@ -1,4 +1,6 @@
 const Router = require('koa-router');
+const asyncBusboy = require('async-busboy');
+const mapSeries = require('async/mapSeries');
 
 const log = require('../lib/logger');
 
@@ -36,6 +38,38 @@ router.post(
           invoiceContact: contactResult.Status,
           invoice: invoiceResult.Status,
         },
+      };
+    } catch (err) {
+      log.error(err);
+      ctx.throw(500, 'Internal Server Error');
+    }
+  },
+);
+
+router.post(
+  '/attachment',
+  async ctx => {
+    try {
+      const { files, fields } = await asyncBusboy(ctx.req);
+      console.log(ctx.request.header)
+      // mapSeries(files, file => {
+      //   const attachmentResult = await RegistrationService.createAttachment({
+      //     file,
+      //     contentLength: ctx.request.header["content-length"]
+      //   });
+      // })
+      // const attachmentResult = await RegistrationService.createAttachment({
+      //   files,
+      //   contentLength: ctx.request.header["content-length"]
+      // });
+      ctx.code = 200;
+      ctx.body = {
+        code: 200,
+        data: files
+        // data: {
+        //   attachmentToken: attachmentResult.data.upload.token,
+        //   attachmentStatus: attachmentResult.statusText,
+        // }
       };
     } catch (err) {
       log.error(err);

@@ -3,7 +3,9 @@ const axios = require('axios');
 const { crm } = require('../config');
 
 const {
-  BASE_URL,
+  PARTY_URL,
+  ATTACHMENT_URL,
+  ENTRY_URL,
   headerConfig,
 } = crm;
 
@@ -53,7 +55,21 @@ class RegistrationService {
       },
     };
 
-    return axios.post(BASE_URL, data, headerConfig);
+    return axios.post(PARTY_URL, data, headerConfig);
+  }
+
+  static createAttachment({
+    files,
+    contentLength,
+  }) {
+    return axios.post(ATTACHMENT_URL, files, {
+      headers: {
+        Authorization: headerConfig.headers.Authorization,
+        "Content-Type": files[0].mimeType,
+        "Content-Length": contentLength,
+        "X-Attachment-Filename": files[0].filename
+      },
+    });
   }
 }
 
