@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "d52d0356-34b7-4af4-8a8d-37843efd20e2",
+		"name": "centreo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registration form",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file1",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "file2",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "name",
+							"value": "FOR TEST",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "about",
+							"value": "a happy company",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "12345678",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "happy@happy.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "street",
+							"value": "847 North Rush Street",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "Chicago",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "United States",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "zip",
+							"value": "65629",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/registration",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"registration"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
