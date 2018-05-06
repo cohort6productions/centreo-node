@@ -59,7 +59,6 @@ class RegistrationService {
   }
 
   static createAttachment({
-    body,
     file,
     readFile,
   }) {

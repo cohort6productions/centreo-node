@@ -50,16 +50,14 @@ router.post(
   '/attachment',
   async (ctx, next) => {
     try {
-      console.log(ctx.req)
       const { files, fields } = await asyncBusboy(ctx.req);
-      console.log(1)
+
       const readFile = await new Promise((resolve, reject) => {
         let data = [];
         let length = 0;
         files[0].on('data', (chunk) => {
           data.push(chunk)
           length += chunk.length
-          // data += chunk
         });
         files[0].on('error', (err) => {
           console.log(err)
@@ -72,7 +70,6 @@ router.post(
           });
         })
       })
-      console.log(2)
       // mapSeries(files, file => {
       //   const attachmentResult = await RegistrationService.createAttachment({
       //     file,
@@ -80,11 +77,10 @@ router.post(
       //   });
       // })
       const attachmentResult = await RegistrationService.createAttachment({
-        body: ctx.req,
         file: files[0],
         readFile
       });
-      console.log(3)
+
       // console.log(files)
       ctx.code = 200;
       ctx.body = {
