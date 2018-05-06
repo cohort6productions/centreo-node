@@ -11,7 +11,7 @@ const {
 
 class RegistrationService {
   static createRegistration({
-    main,
+    input,
     invoiceNo,
   }) {
     const today = new Date();
@@ -19,7 +19,28 @@ class RegistrationService {
 
     const data = {
       party: {
-        ...main,
+        type: "organisation",
+        name: input.name,
+        about: input.about,
+        emailAddresses: [
+          {
+            address: input.email
+          }
+        ],
+        addresses: [
+          {
+            city: input.city,
+            country: input.country,
+            street: input.street,
+            zip: input.zip
+          }
+        ],
+        phoneNumbers: [
+          {
+            number: input.phone
+          }
+        ],
+        websites: [],
         fields: [
           {
             definition: {
