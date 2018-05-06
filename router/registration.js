@@ -20,72 +20,73 @@ router.post(
     try {
       const { files, fields } = await asyncBusboy(ctx.req);
 
-      const contactResult = await InvoiceService.createContact({
-        input: fields,
-      });
-      log.trace(contactResult, 'router:registration:invoice:createContact');
+      // const contactResult = await InvoiceService.createContact({
+      //   input: fields,
+      // });
+      // log.trace(contactResult, 'router:registration:invoice:createContact');
 
-      const invoiceResult = await InvoiceService.createInvoice({
-        ContactID: contactResult.Contacts[0].ContactID,
-      });
-      log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
+      // const invoiceResult = await InvoiceService.createInvoice({
+      //   ContactID: contactResult.Contacts[0].ContactID,
+      // });
+      // log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
 
-      const registrationResult = await RegistrationService.createRegistration({
-        input: fields,
-        invoiceNo: invoiceResult.Invoices[0].InvoiceNumber
-      });
-      log.trace(registrationResult.data, 'router:registration:crm:createRegistration');
+      // const registrationResult = await RegistrationService.createRegistration({
+      //   input: fields,
+      //   invoiceNo: invoiceResult.Invoices[0].InvoiceNumber
+      // });
+      // log.trace(registrationResult.data, 'router:registration:crm:createRegistration');
 
-      await new Promise((resolve, reject) => {
-        eachSeries(files, async file => {
-          const readFile = await new Promise((resolve, reject) => {
-            let data = [];
-            let length = 0;
-            file.on('data', (chunk) => {
-              data.push(chunk)
-              length += chunk.length
-            });
-            file.on('error', (err) => {
-              console.log(err)
-            });
-            file.on('end', () => {
-              return resolve({
-                length,
-                data: Buffer.concat(data)
-              });
-            })
-          });
+      // await new Promise((resolve, reject) => {
+      //   eachSeries(files, async file => {
+      //     const readFile = await new Promise((resolve, reject) => {
+      //       let data = [];
+      //       let length = 0;
+      //       file.on('data', (chunk) => {
+      //         data.push(chunk)
+      //         length += chunk.length
+      //       });
+      //       file.on('error', (err) => {
+      //         console.log(err)
+      //       });
+      //       file.on('end', () => {
+      //         return resolve({
+      //           length,
+      //           data: Buffer.concat(data)
+      //         });
+      //       })
+      //     });
 
-          const attachmentResult = await RegistrationService.createAttachment({
-            file,
-            readFile
-          });
+      //     const attachmentResult = await RegistrationService.createAttachment({
+      //       file,
+      //       readFile
+      //     });
 
-          attachmentToken.push(attachmentResult.data.upload)
-        }, err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      })
+      //     attachmentToken.push(attachmentResult.data.upload)
+      //   }, err => {
+      //     if (err) {
+      //       reject(err);
+      //     } else {
+      //       resolve();
+      //     }
+      //   });
+      // })
 
-      const entryResult = await RegistrationService.createEntry({
-        partyId: registrationResult.data.party.id,
-        attachments: attachmentToken
-      })
-      log.trace(entryResult.data, 'router:registration:crm:createEntry');
+      // const entryResult = await RegistrationService.createEntry({
+      //   partyId: registrationResult.data.party.id,
+      //   attachments: attachmentToken
+      // })
+      // log.trace(entryResult.data, 'router:registration:crm:createEntry');
 
       ctx.code = 200;
       ctx.body = {
         code: 200,
-        data: {
-          invoiceContact: contactResult.Status,
-          invoice: invoiceResult.Status,
-          registration: registrationResult.statusText,
-          entry: entryResult.statusText,
-        },
+        data: 'ok'
+        // data: {
+        //   invoiceContact: contactResult.Status,
+        //   invoice: invoiceResult.Status,
+        //   registration: registrationResult.statusText,
+        //   entry: entryResult.statusText,
+        // },
       };
     } catch (err) {
       log.error(err);

@@ -83,7 +83,6 @@ class RegistrationService {
     file,
     readFile,
   }) {
-    console.log(file.mimeType)
     return axios.post(ATTACHMENT_URL, readFile.data, {
       headers: {
         Authorization: headerConfig.headers.Authorization,

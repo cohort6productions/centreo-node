@@ -3,7 +3,7 @@ const validateRequest = require('../lib/validateRequest');
 
 class Middleware {
   static async schemaValidator(ctx, next) {
-    const result = validateRequest(ctx);
+    const result = await validateRequest(ctx);
     if (result) {
       await next();
     } else {
