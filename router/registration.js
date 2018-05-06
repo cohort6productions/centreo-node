@@ -48,24 +48,49 @@ router.post(
 
 router.post(
   '/attachment',
-  async ctx => {
+  async (ctx, next) => {
     try {
+      console.log(ctx.req)
       const { files, fields } = await asyncBusboy(ctx.req);
-      console.log(ctx.request.header)
+      console.log(1)
+      const readFile = await new Promise((resolve, reject) => {
+        let data = [];
+        let length = 0;
+        files[0].on('data', (chunk) => {
+          data.push(chunk)
+          length += chunk.length
+          // data += chunk
+        });
+        files[0].on('error', (err) => {
+          console.log(err)
+        });
+        files[0].on('end', () => {
+          console.log(data)
+          return resolve({
+            length,
+            data: Buffer.concat(data)
+          });
+        })
+      })
+      console.log(2)
       // mapSeries(files, file => {
       //   const attachmentResult = await RegistrationService.createAttachment({
       //     file,
       //     contentLength: ctx.request.header["content-length"]
       //   });
       // })
-      // const attachmentResult = await RegistrationService.createAttachment({
-      //   files,
-      //   contentLength: ctx.request.header["content-length"]
-      // });
+      const attachmentResult = await RegistrationService.createAttachment({
+        body: ctx.req,
+        file: files[0],
+        readFile
+      });
+      console.log(3)
+      // console.log(files)
       ctx.code = 200;
       ctx.body = {
         code: 200,
-        data: files
+        data: attachmentResult.data
+        // data: result,
         // data: {
         //   attachmentToken: attachmentResult.data.upload.token,
         //   attachmentStatus: attachmentResult.statusText,

@@ -59,17 +59,38 @@ class RegistrationService {
   }
 
   static createAttachment({
-    files,
-    contentLength,
+    body,
+    file,
+    readFile,
   }) {
-    return axios.post(ATTACHMENT_URL, files, {
+    console.log(file.mimeType)
+    return axios.post(ATTACHMENT_URL, readFile.data, {
       headers: {
         Authorization: headerConfig.headers.Authorization,
-        "Content-Type": files[0].mimeType,
-        "Content-Length": contentLength,
-        "X-Attachment-Filename": files[0].filename
+        "Content-Type": file.mimeType,
+        "Content-Length": readFile.length,
+        "X-Attachment-Filename": file.filename
       },
     });
+  }
+
+  static createEntry({
+    partyId,
+    attachmentId
+  }) {
+    const data = {
+      entry : {
+        attachments : [ {
+          token : attachmentId
+        } ],
+        party : {
+          id : partyId
+        },
+        type : "note",
+        content : "SRPOUT package passport and address proof"
+      }
+    }
+    return axios.post(ENTRY_URL, data, headerConfig)
   }
 }
 
