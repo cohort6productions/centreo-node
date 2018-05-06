@@ -16,7 +16,7 @@ class RegistrationService {
   }) {
     const today = new Date();
     const todayString = `${today.getFullYear()}-${today.getMonth() >= 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`}-${today.getDate() >= 10 ? today.getDate() : `0${today.getDate()}`}`;
-    
+
     const data = {
       party: {
         ...main,
@@ -75,18 +75,16 @@ class RegistrationService {
 
   static createEntry({
     partyId,
-    attachmentId
+    attachments
   }) {
     const data = {
-      entry : {
-        attachments : [ {
-          token : attachmentId
-        } ],
-        party : {
-          id : partyId
+      entry: {
+        attachments,
+        party: {
+          id: partyId
         },
-        type : "note",
-        content : "SRPOUT package passport and address proof"
+        type: "note",
+        content: "SRPOUT package passport and address proof"
       }
     }
     return axios.post(ENTRY_URL, data, headerConfig)

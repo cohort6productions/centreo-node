@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const asyncBusboy = require('async-busboy');
-const mapSeries = require('async/mapSeries');
+const eachSeries = require('async/eachSeries');
 
 const log = require('../lib/logger');
 
@@ -49,43 +49,56 @@ router.post(
 router.post(
   '/attachment',
   async (ctx, next) => {
+    const attachmentToken = [];
+
     try {
       const { files, fields } = await asyncBusboy(ctx.req);
 
-      const readFile = await new Promise((resolve, reject) => {
-        let data = [];
-        let length = 0;
-        files[0].on('data', (chunk) => {
-          data.push(chunk)
-          length += chunk.length
-        });
-        files[0].on('error', (err) => {
-          console.log(err)
-        });
-        files[0].on('end', () => {
-          console.log(data)
-          return resolve({
-            length,
-            data: Buffer.concat(data)
+      await new Promise((resolve, reject) => {
+        eachSeries(files, async file => {
+          const readFile = await new Promise((resolve, reject) => {
+            let data = [];
+            let length = 0;
+            file.on('data', (chunk) => {
+              data.push(chunk)
+              length += chunk.length
+            });
+            file.on('error', (err) => {
+              console.log(err)
+            });
+            file.on('end', () => {
+              return resolve({
+                length,
+                data: Buffer.concat(data)
+              });
+            })
           });
-        })
+
+          const attachmentResult = await RegistrationService.createAttachment({
+            file,
+            readFile
+          });
+
+          attachmentToken.push(attachmentResult.data.upload)
+        }, err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
       })
-      // mapSeries(files, file => {
-      //   const attachmentResult = await RegistrationService.createAttachment({
-      //     file,
-      //     contentLength: ctx.request.header["content-length"]
-      //   });
+
+      // const entryResult = RegistrationService.createEntry({
+      //   partyId: ,
+      //   attachments: attachmentToken
       // })
-      const attachmentResult = await RegistrationService.createAttachment({
-        file: files[0],
-        readFile
-      });
 
       // console.log(files)
       ctx.code = 200;
       ctx.body = {
         code: 200,
-        data: attachmentResult.data
+        data: attachmentToken
         // data: result,
         // data: {
         //   attachmentToken: attachmentResult.data.upload.token,
