@@ -19,60 +19,60 @@ class RegistrationService {
 
     const data = {
       party: {
-        type: "organisation",
+        type: 'organisation',
         name: input.name,
         about: input.about,
         emailAddresses: [
           {
-            address: input.email
-          }
+            address: input.email,
+          },
         ],
         addresses: [
           {
             city: input.city,
             country: input.country,
             street: input.street,
-            zip: input.zip
-          }
+            zip: input.zip,
+          },
         ],
         phoneNumbers: [
           {
-            number: input.phone
-          }
+            number: input.phone,
+          },
         ],
         websites: [],
         fields: [
           {
             definition: {
-              id: 291070 // IH/VO/CW/CR
+              id: 291070, // IH/VO/CW/CR
             },
-            value: invoiceNo
+            value: invoiceNo,
           },
           {
             definition: {
-              id: 291071 // Company Incorporation Date
+              id: 291071, // Company Incorporation Date
             },
-            value: todayString
+            value: todayString,
           },
           {
             definition: {
-              id: 291072 // Company Secretary Date
+              id: 291072, // Company Secretary Date
             },
-            value: todayString
+            value: todayString,
           },
           {
             definition: {
-              id: 291075 // WC Registered Office
+              id: 291075, // WC Registered Office
             },
-            value: todayString
+            value: todayString,
           },
           {
             definition: {
-              id: 291077 // SW RO
+              id: 291077, // SW RO
             },
-            value: todayString
-          }
-        ]
+            value: todayString,
+          },
+        ],
       },
     };
 
@@ -86,28 +86,28 @@ class RegistrationService {
     return axios.post(ATTACHMENT_URL, readFile.data, {
       headers: {
         Authorization: headerConfig.headers.Authorization,
-        "Content-Type": file.mimeType,
-        "Content-Length": readFile.length,
-        "X-Attachment-Filename": file.filename
+        'Content-Type': file.mimeType,
+        'Content-Length': readFile.length,
+        'X-Attachment-Filename': file.filename,
       },
     });
   }
 
   static createEntry({
     partyId,
-    attachments
+    attachments,
   }) {
     const data = {
       entry: {
         attachments,
         party: {
-          id: partyId
+          id: partyId,
         },
-        type: "note",
-        content: "SRPOUT package passport and address proof"
-      }
-    }
-    return axios.post(ENTRY_URL, data, headerConfig)
+        type: 'note',
+        content: 'SRPOUT package passport and address proof',
+      },
+    };
+    return axios.post(ENTRY_URL, data, headerConfig);
   }
 }
 

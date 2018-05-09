@@ -6,26 +6,26 @@ const xero = new XeroClient(invoice.appCredentials);
 
 class InvoiceService {
   static async createContact({
-    input
+    input,
   }) {
     const data = {
       Name: input.name,
       EmailAddress: input.email,
       Addresses: [
         {
-          AddressType: "POBOX",
+          AddressType: 'POBOX',
           AddressLine1: input.street,
           City: input.city,
           Country: input.country,
-          PostalCode: input.zip
-        }
+          PostalCode: input.zip,
+        },
       ],
       Phones: [
         {
-          PhoneType: "DEFAULT",
-          PhoneNumber: input.phone
-        }
-      ]
+          PhoneType: 'DEFAULT',
+          PhoneNumber: input.phone,
+        },
+      ],
     };
 
     const result = await xero.contacts.create(data);

@@ -32,36 +32,35 @@ router.post(
 
       const registrationResult = await RegistrationService.createRegistration({
         input: fields,
-        invoiceNo: invoiceResult.Invoices[0].InvoiceNumber
+        invoiceNo: invoiceResult.Invoices[0].InvoiceNumber,
       });
       log.trace(registrationResult.data, 'router:registration:crm:createRegistration');
 
       await new Promise((resolve, reject) => {
         eachSeries(files, async file => {
-          const readFile = await new Promise((resolve, reject) => {
-            let data = [];
+          const readFile = await new Promise((res, rej) => {
+            const data = [];
             let length = 0;
-            file.on('data', (chunk) => {
-              data.push(chunk)
-              length += chunk.length
+            file.on('data', chunk => {
+              data.push(chunk);
+              length += chunk.length;
             });
-            file.on('error', (err) => {
-              console.log(err)
+            file.on('error', err => {
+              rej(err);
             });
-            file.on('end', () => {
-              return resolve({
+            file.on('end', () =>
+              res({
                 length,
-                data: Buffer.concat(data)
-              });
-            })
+                data: Buffer.concat(data),
+              }));
           });
 
           const attachmentResult = await RegistrationService.createAttachment({
             file,
-            readFile
+            readFile,
           });
 
-          attachmentToken.push(attachmentResult.data.upload)
+          attachmentToken.push(attachmentResult.data.upload);
         }, err => {
           if (err) {
             reject(err);
@@ -69,12 +68,12 @@ router.post(
             resolve();
           }
         });
-      })
+      });
 
       const entryResult = await RegistrationService.createEntry({
         partyId: registrationResult.data.party.id,
-        attachments: attachmentToken
-      })
+        attachments: attachmentToken,
+      });
       log.trace(entryResult.data, 'router:registration:crm:createEntry');
 
       ctx.code = 200;

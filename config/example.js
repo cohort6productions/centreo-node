@@ -7,17 +7,17 @@ const config = {
     ENTRY_URL: 'https://api.capsulecrm.com/api/v2/entries',
     headerConfig: {
       headers: {
-        Authorization: `Bearer ${process.env.CAPSULE_AUTH_TOKEN}`
+        Authorization: `Bearer ${process.env.CAPSULE_AUTH_TOKEN}`,
       },
     },
   },
   invoice: {
     appCredentials: {
-      "appType": "",
-      "consumerKey": "",
-      "consumerSecret": "",
-      "privateKeyPath": ""
-    }
+      appType: '',
+      consumerKey: '',
+      consumerSecret: '',
+      privateKeyPath: '',
+    },
   },
   development: 'windows',
   logger: {
@@ -25,10 +25,10 @@ const config = {
     level: 'trace',
     streams: [
       {
-        stream: process.stderr
-      }
-    ]
+        stream: process.stderr,
+      },
+    ],
   },
-}
+};
 
 module.exports = config;
