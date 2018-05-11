@@ -1,5 +1,4 @@
 const Router = require('koa-router');
-const asyncBusboy = require('async-busboy');
 const eachSeries = require('async/eachSeries');
 
 const log = require('../lib/logger');
@@ -13,6 +12,7 @@ const router = new Router();
 
 router.post(
   '/',
+  middleware.formDataParser,
   middleware.schemaValidator,
   async ctx => {
     const attachmentToken = [];
