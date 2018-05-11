@@ -4,7 +4,9 @@ const validateRequest = require('../lib/validateRequest');
 class Middleware {
   static async schemaValidator(ctx, next) {
     const result = await validateRequest(ctx);
-    if (result) {
+    if (result.valid) {
+      ctx.state.files = result.files;
+      ctx.state.fields = result.fields;
       await next();
     } else {
       ctx.status = 400;

@@ -14,5 +14,5 @@ app.use(bodyParser());
 app.use(router.routes());
 
 app.listen(PORT, () => {
-  console.log('Service started at port 8080');
+  console.log(`Service started at port ${PORT}`);
 });
