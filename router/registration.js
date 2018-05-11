@@ -16,10 +16,12 @@ router.post(
   middleware.schemaValidator,
   async ctx => {
     const attachmentToken = [];
+    const {
+      files,
+      fields,
+    } = ctx.state;
 
     try {
-      const { files, fields } = await asyncBusboy(ctx.req);
-
       const contactResult = await InvoiceService.createContact({
         input: fields,
       });
@@ -70,6 +72,24 @@ router.post(
         });
       });
 
+      // Ideal way of adding attachments
+      // await new Promise((resolve, reject) => {
+      //   eachSeries(files, async file => {
+      //     const attachmentResult = await RegistrationService.createAttachment({
+      //       file,
+      //       readFile: {data: file, length: file.bytesRead}
+      //     });
+
+      //     attachmentToken.push(attachmentResult.data.upload)
+      //   }, err => {
+      //     if (err) {
+      //       reject(err);
+      //     } else {
+      //       resolve();
+      //     }
+      //   });
+      // })
+
       const entryResult = await RegistrationService.createEntry({
         partyId: registrationResult.data.party.id,
         attachments: attachmentToken,
@@ -92,74 +112,5 @@ router.post(
     }
   },
 );
-
-// router.post(
-//   '/attachment',
-//   async (ctx, next) => {
-//     const attachmentToken = [];
-
-//     try {
-//       const { files, fields } = await asyncBusboy(ctx.req);
-//       console.log(fields)
-
-//       if (files.length > 0) {
-//         await new Promise((resolve, reject) => {
-//           eachSeries(files, async file => {
-//             const readFile = await new Promise((resolve, reject) => {
-//               let data = [];
-//               let length = 0;
-//               file.on('data', (chunk) => {
-//                 data.push(chunk)
-//                 length += chunk.length
-//               });
-//               file.on('error', (err) => {
-//                 console.log(err)
-//               });
-//               file.on('end', () => {
-//                 return resolve({
-//                   length,
-//                   data: Buffer.concat(data)
-//                 });
-//               })
-//             });
-
-//             const attachmentResult = await RegistrationService.createAttachment({
-//               file,
-//               readFile
-//             });
-
-//             attachmentToken.push(attachmentResult.data.upload)
-//           }, err => {
-//             if (err) {
-//               reject(err);
-//             } else {
-//               resolve();
-//             }
-//           });
-//         })
-//       }
-
-//       // const entryResult = RegistrationService.createEntry({
-//       //   partyId: ,
-//       //   attachments: attachmentToken
-//       // })
-
-//       // console.log(files)
-//       ctx.code = 200;
-//       ctx.body = {
-//         code: 200,
-//         data: attachmentToken
-//         // data: result,
-//         // data: {
-//         //   attachmentToken: attachmentResult.data.upload.token,
-//         //   attachmentStatus: attachmentResult.statusText,
-//         // }
-//       };
-//     } catch (err) {
-//       log.error(err);
-//       ctx.throw(500, 'Internal Server Error');
-//     }
-//   },
-// );
 
 module.exports = router;
