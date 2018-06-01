@@ -38,7 +38,7 @@ router.post(
       const attachmentToken = await new Promise((resolve, reject) => {
         mapLimit(files, 5, async file => {
           const attachmentResult = await RegistrationService.createAttachment(file);
-          log.trace(attachmentResult, 'router:registration:crm:createAttachment');
+          log.trace(attachmentResult.data.upload, 'router:registration:crm:createAttachment');
           return attachmentResult.data.upload;
         }, (err, results) => {
           if (err) {

@@ -1,16 +1,8 @@
-const asyncBusboy = require('async-busboy');
 const axios = require('axios');
 
 const validateRequest = require('../lib/validateRequest');
 
 class Middleware {
-  static async formDataParser(ctx, next) {
-    const { files, fields } = await asyncBusboy(ctx.req);
-    ctx.state.files = files;
-    ctx.state.fields = fields;
-    await next();
-  }
-
   static async schemaValidator(ctx, next) {
     const result = await validateRequest(ctx);
     if (result) {
@@ -26,8 +18,16 @@ class Middleware {
       file1url,
       file2url,
     } = ctx.request.body;
-    const file1 = await axios.get(file1url);
-    const file2 = await axios.get(file2url);
+    const file1 = await axios({
+      url: file1url,
+      method: 'GET',
+      responseType: 'arraybuffer',
+    });
+    const file2 = await axios({
+      url: file2url,
+      method: 'GET',
+      responseType: 'arraybuffer',
+    });
     ctx.state.files = [file1, file2];
     await next();
   }
