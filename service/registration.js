@@ -79,16 +79,15 @@ class RegistrationService {
     return axios.post(PARTY_URL, data, headerConfig);
   }
 
-  static createAttachment({
-    file,
-    readFile,
-  }) {
-    return axios.post(ATTACHMENT_URL, readFile.data, {
+  static createAttachment(file) {
+    const { url } = file.config;
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return axios.post(ATTACHMENT_URL, file.data, {
       headers: {
         Authorization: headerConfig.headers.Authorization,
-        'Content-Type': file.mimeType,
-        'Content-Length': readFile.length,
-        'X-Attachment-Filename': file.filename,
+        'Content-Type': file.headers['content-type'],
+        'Content-Length': file.headers['content-length'],
+        'X-Attachment-Filename': filename,
       },
     });
   }

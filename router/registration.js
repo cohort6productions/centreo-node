@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const eachSeries = require('async/eachSeries');
+const mapLimit = require('async/mapLimit');
 
 const log = require('../lib/logger');
 
@@ -12,14 +12,11 @@ const router = new Router();
 
 router.post(
   '/',
-  middleware.formDataParser,
   middleware.schemaValidator,
+  middleware.urlFileReader,
   async ctx => {
-    const attachmentToken = [];
-    const {
-      files,
-      fields,
-    } = ctx.state;
+    const { files } = ctx.state;
+    const fields = ctx.request.body;
 
     try {
       const contactResult = await InvoiceService.createContact({
@@ -38,57 +35,19 @@ router.post(
       });
       log.trace(registrationResult.data, 'router:registration:crm:createRegistration');
 
-      await new Promise((resolve, reject) => {
-        eachSeries(files, async file => {
-          const readFile = await new Promise((res, rej) => {
-            const data = [];
-            let length = 0;
-            file.on('data', chunk => {
-              data.push(chunk);
-              length += chunk.length;
-            });
-            file.on('error', err => {
-              rej(err);
-            });
-            file.on('end', () =>
-              res({
-                length,
-                data: Buffer.concat(data),
-              }));
-          });
-
-          const attachmentResult = await RegistrationService.createAttachment({
-            file,
-            readFile,
-          });
-
-          attachmentToken.push(attachmentResult.data.upload);
-        }, err => {
+      const attachmentToken = await new Promise((resolve, reject) => {
+        mapLimit(files, 5, async file => {
+          const attachmentResult = await RegistrationService.createAttachment(file);
+          log.trace(attachmentResult.data.upload, 'router:registration:crm:createAttachment');
+          return attachmentResult.data.upload;
+        }, (err, results) => {
           if (err) {
             reject(err);
           } else {
-            resolve();
+            resolve(results);
           }
         });
       });
-
-      // Ideal way of adding attachments
-      // await new Promise((resolve, reject) => {
-      //   eachSeries(files, async file => {
-      //     const attachmentResult = await RegistrationService.createAttachment({
-      //       file,
-      //       readFile: {data: file, length: file.bytesRead}
-      //     });
-
-      //     attachmentToken.push(attachmentResult.data.upload)
-      //   }, err => {
-      //     if (err) {
-      //       reject(err);
-      //     } else {
-      //       resolve();
-      //     }
-      //   });
-      // })
 
       const entryResult = await RegistrationService.createEntry({
         partyId: registrationResult.data.party.id,
