@@ -11,6 +11,7 @@
     "log": "tail -f logs/server.log | ./node_modules/.bin/bunyan"
   },
   "dependencies": {
+    "@koa/cors": "^3.0.0",
     "ajv": "^6.4.0",
     "async": "^2.6.0",
     "async-busboy": "^0.6.2",
@@ -20,6 +21,7 @@
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
+    "stripe": "^6.30.0",
     "xero-node": "^3.0.2"
   },
   "devDependencies": {

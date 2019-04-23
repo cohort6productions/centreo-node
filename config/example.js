@@ -1,6 +1,9 @@
 require('dotenv').config();
 
 const config = {
+  stripe: {
+    SECRET_API_KEY: ''
+  },
   crm: {
     PARTY_URL: 'https://api.capsulecrm.com/api/v2/parties',
     ATTACHMENT_URL: 'https://api.capsulecrm.com/api/v2/attachments/upload',
