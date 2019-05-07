@@ -23,8 +23,9 @@ router.post(
 
       }catch(e) {
           log.trace(e)
+          ctx.status = 500
           ctx.body = {
-            code:  500
+            message:  e
           }
       }
   }

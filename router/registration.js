@@ -10,33 +10,35 @@ const InvoiceService = require('../service/invoice');
 
 const router = new Router();
 
+router.get('/case/:id',
+async ctx => {
+  try{
+    const kase = await RegistrationService.getCase(ctx.params.id);
+    return ctx.body = {
+      ...kase.data
+    }
+  }catch(err){
+    log.error(err);
+    ctx.throw(500, 'Internal Server Error');
+  }
+
+})
+
 router.post(
   '/',
-  middleware.schemaValidator,
   middleware.urlFileReader,
   async ctx => {
     const { files } = ctx.state;
     const fields = ctx.request.body;
-
+    
     try {
-      const contactResult = await InvoiceService.createContact({
-        input: fields,
-      });
-      log.trace(contactResult, 'router:registration:invoice:createContact');
-
-      const invoiceResult = await InvoiceService.createInvoice({
-        ContactID: contactResult.Contacts[0].ContactID,
-      });
-      log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
-
       const registrationResult = await RegistrationService.createRegistration({
-        input: fields,
-        invoiceNo: invoiceResult.Invoices[0].InvoiceNumber,
+        input: fields
       });
       log.trace(registrationResult.data, 'router:registration:crm:createRegistration');
 
       const attachmentToken = await new Promise((resolve, reject) => {
-        mapLimit(files, 5, async file => {
+        mapLimit(files, 10, async file => {
           const attachmentResult = await RegistrationService.createAttachment(file);
           log.trace(attachmentResult.data.upload, 'router:registration:crm:createAttachment');
           return attachmentResult.data.upload;
@@ -49,9 +51,12 @@ router.post(
         });
       });
 
+      const content = RegistrationService.createContent(fields);
+
       const entryResult = await RegistrationService.createEntry({
         partyId: registrationResult.data.party.id,
-        attachments: attachmentToken,
+        content: content.replace(/[\[\]\{\}]+/g, ''),
+        attachments: attachmentToken
       });
       log.trace(entryResult.data, 'router:registration:crm:createEntry');
 
@@ -59,8 +64,6 @@ router.post(
       ctx.body = {
         code: 200,
         data: {
-          invoiceContact: contactResult.Status,
-          invoice: invoiceResult.Status,
           registration: registrationResult.statusText,
           entry: entryResult.statusText,
         },
