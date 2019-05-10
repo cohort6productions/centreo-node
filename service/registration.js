@@ -27,19 +27,24 @@ class RegistrationService {
       if (value === 'shareholders' || value == 'director') {
         content[value].map((share) => {
           Object.keys(share).map((v, i) => {
-            if (!filesArray.includes(v)) {
+            if (!filesArray.includes(v) && !!share[v]) {
               contentText += `${v}: ${share[v]} \n`
             }
           })
           contentText += '\n \n'
         })
-      }else if(value === 'comments') {
+      } else if(value === 'comments') {
         contentText += content[value]
+        contentText += '\n \n'
+      } else if(value === 'terms') {
+        contentText += content[value] ? 'Agreed to the terms & conditions' : 'No'
         contentText += '\n \n'
       } else {
         Object.keys(content[value]).map((v,i) => {
           
-          contentText += `${v}: ${content[value][v]} \n`
+          if (!!content[value][v]) {
+            contentText += `${v}: ${content[value][v]} \n`
+          }
           
         })
         contentText += '\n \n'
