@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const mapLimit = require('async/mapLimit');
+const moment = require('moment');
 
 const log = require('../lib/logger');
 
@@ -59,6 +60,19 @@ router.post(
         attachments: attachmentToken
       });
       log.trace(entryResult.data, 'router:registration:crm:createEntry');
+
+      const today = moment()
+      const nextDay = moment(today).add(1, 'days')
+      const dueDate = nextDay.format('YYYY-MM-DD')
+      const dueTime = nextDay.format('HH:mm:ss')
+
+      const taskResult = await RegistrationService.createTask({
+        partyId: registrationResult.data.party.id,
+        dueDate: dueDate,
+        dueTime: dueTime,
+        desc: "company incorporation"
+      });
+      log.trace(taskResult.data, 'router:registration:crm:createTask');
 
       ctx.code = 200;
       ctx.body = {

@@ -8,6 +8,7 @@ const config = {
     PARTY_URL: 'https://api.capsulecrm.com/api/v2/parties',
     ATTACHMENT_URL: 'https://api.capsulecrm.com/api/v2/attachments/upload',
     ENTRY_URL: 'https://api.capsulecrm.com/api/v2/entries',
+    TASK_URL: 'https://api.capsulecrm.com/api/v2/tasks',
     headerConfig: {
       headers: {
         Authorization: `Bearer ${process.env.CAPSULE_AUTH_TOKEN}`,

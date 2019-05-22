@@ -8,6 +8,7 @@ const {
   ATTACHMENT_URL,
   ENTRY_URL,
   headerConfig,
+  TASK_URL
 } = crm;
 
 class RegistrationService {
@@ -119,6 +120,28 @@ class RegistrationService {
     };
     console.log(data)
     return axios.post(ENTRY_URL, data, headerConfig);
+  }
+
+  static createTask({
+    partyId,
+    dueDate,
+    dueTime,
+    desc
+  }) {
+    const data = {
+      task: {
+        description: desc,
+        party: {
+          id: partyId,
+        },
+        category: {
+          name: "follow-up"
+        },
+        dueOn: dueDate,
+        dueTime: dueTime
+      },
+    };
+    return axios.post(TASK_URL, data, headerConfig);
   }
 }
 
