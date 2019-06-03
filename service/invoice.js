@@ -9,21 +9,13 @@ class InvoiceService {
     input,
   }) {
     const data = {
-      Name: input.name,
+      Name: `${input.firstname} ${input.lastname}`,
       EmailAddress: input.email,
-      Addresses: [
-        {
-          AddressType: 'POBOX',
-          AddressLine1: input.street,
-          City: input.city,
-          Country: input.country,
-          PostalCode: input.zip,
-        },
-      ],
       Phones: [
         {
           PhoneType: 'DEFAULT',
           PhoneNumber: input.phone,
+          PhoneCountryCode: input.country_code
         },
       ],
     };

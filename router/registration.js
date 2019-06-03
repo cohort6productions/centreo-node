@@ -33,6 +33,16 @@ router.post(
     const fields = ctx.request.body;
     
     try {
+      const contactResult = await InvoiceService.createContact({
+        input: fields.personal
+      });
+      log.trace(contactResult, 'router:registration:invoice:createContact');
+
+      const invoiceResult = await InvoiceService.createInvoice({
+        ContactID: contactResult.Contacts[0].ContactID,
+      });
+      log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
+
       const registrationResult = await RegistrationService.createRegistration({
         input: fields
       });
@@ -52,7 +62,7 @@ router.post(
         });
       });
 
-      const content = RegistrationService.createContent(fields);
+      const content = RegistrationService.createContent(fields, invoiceResult.Invoices[0].InvoiceNumber);
 
       const entryResult = await RegistrationService.createEntry({
         partyId: registrationResult.data.party.id,

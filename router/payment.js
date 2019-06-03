@@ -15,6 +15,8 @@ router.post(
       try {
           const body = ctx.request.body
           const data = await StripeService.charge(body.token.id, body.amount, body.billing_email)
+          log.trace(data, 'router:payment:stripe:charge');
+
           return ctx.body = {
               code: 200,
               message: 'Payment Successful',
