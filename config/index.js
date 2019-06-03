@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const config = {
   stripe: {
-    SECRET_API_KEY: process.env.SECRET_API_KEY
+    SECRET_API_KEY: process.env.STRIPE_SECRET_API_KEY
   },
   crm: {
     PARTY_URL: 'https://api.capsulecrm.com/api/v2/parties',

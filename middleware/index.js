@@ -14,27 +14,6 @@ class Middleware {
     }
   }
 
-  // static async urlFileReader(ctx, next) {
-  //   const {
-  //     file1url,
-  //     file2url,
-  //   } = ctx.request.body;
-  //   const file1 = await axios({
-  //     url: file1url,
-  //     method: 'GET',
-  //     responseType: 'arraybuffer',
-  //   });
-  //   const file2 = await axios({
-  //     url: file2url,
-  //     method: 'GET',
-  //     responseType: 'arraybuffer',
-  //   });
-  //   ctx.state.files = [file1, file2];
-  //   await next();
-  // }
-  
-
-
   static async urlFileReader(ctx, next) {
     const {shareholders, director} = ctx.request.body;
     const mergedData = [...shareholders, ...director]
@@ -58,13 +37,14 @@ class Middleware {
 
     mergedData.forEach((obj) => {
       Object.keys(obj).map((value, key) => {
-        if (filesArray.includes(value) && !!obj[value]) {
-          const dataurl = obj[value]
+        if (filesArray.includes(value) && !!obj[value].file) {
+          const dataurl = obj[value].file
+          const source = obj[value].source
           const mimetype = base64MimeType(dataurl)
           const ext = dataurl.substring(dataurl.indexOf('/') + 1, dataurl.indexOf(';base64'))
           const base64Image = dataurl.split(';base64,').pop();
           const file = Buffer.from(base64Image, 'base64');
-          const filename = !!obj.firstname ? `${obj.firstname}_${obj.lastname}_${value}.${ext}` : `${obj.companyname}_${value}.${ext}`
+          const filename = !!obj.firstname ? `${obj.firstname}_${obj.lastname}_${value}_${source}.${ext}` : `${obj.companyname}_${value}_${source}.${ext}`
 
           files.push({
             filename: filename,
@@ -76,7 +56,6 @@ class Middleware {
         
       })
     })
-    
     ctx.state.files = files;
     await next()
   }

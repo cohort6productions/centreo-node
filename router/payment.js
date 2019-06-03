@@ -3,7 +3,7 @@ const log = require('../lib/logger');
 const StripeService = require('../service/stripe')
 const router = new Router();
 
-router.post('/test', (ctx, next) => {
+router.get('/test', (ctx, next) => {
     console.log(ctx.request)
     return ctx.body = {
         code: 200,

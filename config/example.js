@@ -11,7 +11,7 @@ const config = {
     TASK_URL: 'https://api.capsulecrm.com/api/v2/tasks',
     headerConfig: {
       headers: {
-        Authorization: `Bearer ${process.env.CAPSULE_AUTH_TOKEN}`,
+        Authorization: `Bearer `,
       },
     },
   },
