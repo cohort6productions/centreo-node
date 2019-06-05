@@ -18,10 +18,10 @@ const config = {
   },
   invoice: {
     appCredentials: {
-      appType: 'public',
+      appType: 'private',
       consumerKey: process.env.XERO_CONSUMER_KEY,
       consumerSecret: process.env.XERO_CONSUMER_SECRET,
-      privateKeyPath: process.env.XERO_PRIVATE_KEY
+      privateKeyPath: './config/private.pem'
     },
   },
   development: 'windows',

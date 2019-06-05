@@ -16,7 +16,7 @@ class RegistrationService {
     return axios.get(`${CASE_URL}`, headerConfig);
   }
   
-  static createContent (content, invoiceNumber) {
+  static createContent (content, invoiceNumber = "") {
     var contentText='';
 
     const filesArray = ['identity', 'address_proof', 'article_of_associate', 'business_license']
@@ -52,10 +52,9 @@ class RegistrationService {
 
       }
     })
-
-    if (!!invoiceNumber) {
-      contentText += `INVOICE NO. \n ${invoiceNumber}`
-    }
+    
+    contentText += `INVOICE NO. \n ${invoiceNumber}`
+    
 
     return contentText;
   }

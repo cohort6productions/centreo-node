@@ -4,3 +4,4 @@ node_modules
 privatekey.pem
 public_privatekey.pfx
 publickey.cer
+config/private.pem
