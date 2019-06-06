@@ -14,7 +14,17 @@ router.post(
   '/', async ctx => {
       try {
           const body = ctx.request.body
-          const data = await StripeService.charge(body.token.id, body.amount, body.billing_email)
+          const customer = await StripeService.createCustomer({
+            token: body.token.id,
+            billing_email: body.billing_email
+          });
+          log.trace(customer, 'router:payment:stripe:customer');
+
+          const data = await StripeService.charge({
+              amount: body.amount, 
+              customer: customer
+            })
+
           log.trace(data, 'router:payment:stripe:charge');
 
           return ctx.body = {
