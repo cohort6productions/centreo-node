@@ -33,13 +33,14 @@ router.post(
     const fields = ctx.request.body;
     
     try {
-      const contactResult = await InvoiceService.createContact({
+      const contactResult = await InvoiceService.findOrCreateContact({
         input: fields.personal
       });
       log.trace(contactResult, 'router:registration:invoice:createContact');
 
       const invoiceResult = await InvoiceService.createInvoice({
         ContactID: contactResult.Contacts[0].ContactID,
+        Package: fields.package
       });
       log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
 

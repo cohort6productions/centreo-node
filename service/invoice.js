@@ -5,11 +5,34 @@ const { invoice } = require('../config');
 const xero = new XeroClient(invoice.appCredentials);
 
 class InvoiceService {
+
+  static async findContactByName(name) {
+    const contact = await xero.contacts.get({
+      where: `name="${name}"`
+    })
+
+    return contact
+  }
+
+  static async findOrCreateContact({
+    input
+  }) {
+    const name = `${input.firstname} ${input.lastname}`
+    let contact = await this.findContactByName(name)
+    if (contact.Contacts.length === 0) {
+      contact = await this.createContact({input})
+    }
+    
+    return contact
+  }
+
   static async createContact({
     input,
   }) {
+    const name = `${input.firstname} ${input.lastname}`
+
     const data = {
-      Name: `${input.firstname} ${input.lastname}`,
+      Name: name,
       EmailAddress: input.email,
       Phones: [
         {
@@ -25,7 +48,12 @@ class InvoiceService {
     return result;
   }
 
-  static async createInvoice({ ContactID }) {
+  static async createInvoice({ ContactID, Package }) {
+    const ItemMap = {
+      grow : "WGrow",
+      sprout : "WSprout",
+      seed : "WSeed"
+    };
     const data = {
       Type: 'ACCREC',
       Contact: {
@@ -34,7 +62,7 @@ class InvoiceService {
       LineItems: [
         {
           Quantity: '1',
-          ItemCode: 'HKCI',
+          ItemCode: ItemMap[Package.toLowerCase()],
         },
       ],
       Date: new Date(),
