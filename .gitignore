@@ -1,6 +1,6 @@
 node_modules
 # config/index.js
 .env
-# privatekey.pem
+privatekey.pem
 public_privatekey.pfx
 publickey.cer
