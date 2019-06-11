@@ -21,7 +21,7 @@ const config = {
       appType: 'private',
       consumerKey: process.env.XERO_CONSUMER_KEY,
       consumerSecret: process.env.XERO_CONSUMER_SECRET,
-      privateKeyPath: './config/privatekey.pem'
+      privateKeyPath: './config/private.pem'
     },
   },
   development: 'windows',
