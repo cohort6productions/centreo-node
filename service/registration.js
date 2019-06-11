@@ -40,6 +40,9 @@ class RegistrationService {
       } else if(value === 'terms') {
         contentText += content[value] ? 'Agreed to the terms & conditions' : 'No'
         contentText += '\n \n'
+      } else if(value === 'package') {
+        contentText += content[value]
+        contentText += '\n \n'
       } else {
         Object.keys(content[value]).map((v,i) => {
           

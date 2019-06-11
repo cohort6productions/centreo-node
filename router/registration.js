@@ -44,6 +44,15 @@ router.post(
       });
       log.trace(invoiceResult, 'router:registration:invoice:createInvoice');
 
+      const paymentResult = await InvoiceService.createPayment({
+        InvoiceID: invoiceResult.Invoices[0].InvoiceID,
+        AccountCode: 200,
+        Amount: invoiceResult.Invoices[0].Total
+      })
+
+      log.trace(paymentResult, 'router:registration:invoice:createPayment');
+
+
       const registrationResult = await RegistrationService.createRegistration({
         input: fields
       });
@@ -91,6 +100,7 @@ router.post(
         data: {
           registration: registrationResult.statusText,
           entry: entryResult.statusText,
+          invoice: invoiceResult.statusText
         },
       };
     } catch (err) {

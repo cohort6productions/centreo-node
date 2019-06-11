@@ -54,6 +54,9 @@ class InvoiceService {
       sprout : "WSprout",
       seed : "WSeed"
     };
+
+    
+
     const data = {
       Type: 'ACCREC',
       Contact: {
@@ -68,11 +71,29 @@ class InvoiceService {
       Date: new Date(),
       DueDate: new Date(),
       LineAmountTypes: 'NoTax',
-      Status: 'DRAFT',
+      Status: 'AUTHORISED',
+      InvoiceNumber: `WEB-${Date.now()}`
     };
 
     const result = await xero.invoices.create(data);
 
+    return result;
+  }
+
+  static async createPayment({
+    InvoiceID,
+    AccountCode,
+    Amount
+  }) {
+    const data = {
+      "Invoice": { "InvoiceID": InvoiceID },
+      "Account": { "Code": AccountCode },
+      "Date": "2009-09-08",
+      "Amount": Amount
+    }
+
+    const result = await xero.payments.create(data);
+    
     return result;
   }
 }
