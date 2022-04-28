@@ -13,7 +13,7 @@
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "ajv": "^6.4.0",
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "async-busboy": "^0.6.2",
     "axios": "^0.18.0",
     "bunyan": "^1.8.12",
